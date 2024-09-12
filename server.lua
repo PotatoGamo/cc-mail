@@ -67,6 +67,7 @@ end
 
 -- Start the server
 local function startServer()
+    print("ID: " .. os.computerID())
     rednet.open("back")
     loadUsers()
     loadMails()
