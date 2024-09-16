@@ -87,7 +87,7 @@ local function connectToServer()
     setColors(colors.default, colors.background)
     local serverID = tonumber(read())
     saveServer(serverID)
-    rednet.open("back")
+    rednet.open("top")
     return serverID
 end
 
@@ -131,11 +131,12 @@ local function login(serverID)
         setColors(colors.success, colors.background)
         print("Login successful!")
         setColors(colors.default, colors.background)
-        saveCredentials(username, password)
+        -- saveCredentials(username, password)
         return username, password
     else
         setColors(colors.error, colors.background)
         print("Login failed.")
+        sleep(1)
         setColors(colors.default, colors.background)
         return nil, nil
     end
@@ -188,7 +189,7 @@ local function main()
     if not serverID then
         serverID = connectToServer()
     else
-        rednet.open("back")
+        rednet.open("top")
     end
 
     -- Automatically login if credentials exist
@@ -228,6 +229,8 @@ local function main()
                 local newUser, newPass = login(serverID)
                 if newUser then
                     username, password = newUser, newPass
+                    cls()
+                    break
                 end
             elseif option == 3 then
                 cls()
