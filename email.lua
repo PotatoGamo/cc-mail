@@ -79,7 +79,15 @@ local function loadServer()
     return nil
 end
 
--- Connect to the server
+local function getModemSide()
+    local modem = peripheral.find("modem")
+    if modem then
+        return peripheral.getName(modem) -- Get the side the modem is on
+    else
+        return nil
+    end
+end
+
 local function connectToServer()
     cls()
     setColors(colors.info, colors.background)
@@ -87,9 +95,20 @@ local function connectToServer()
     setColors(colors.default, colors.background)
     local serverID = tonumber(read())
     saveServer(serverID)
-    rednet.open("top")
+
+    local modemSide = getModemSide()
+    if modemSide then
+        rednet.open(modemSide)
+    else
+        setColors(colors.error, colors.background)
+        print("No modem found! Please attach a modem.")
+        sleep(2)
+        return nil
+    end
+
     return serverID
 end
+
 
 -- Change server
 local function header(serverID)
@@ -189,7 +208,16 @@ local function main()
     if not serverID then
         serverID = connectToServer()
     else
-        rednet.open("top")
+        local modemSide = getModemSide()
+        if modemSide then
+            rednet.open(modemSide)
+        else
+            setColors(colors.error, colors.background)
+            print("No modem detected! Attach a modem and restart.")
+            sleep(2)
+            return
+        end
+
     end
 
     -- Automatically login if credentials exist
