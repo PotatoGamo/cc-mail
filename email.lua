@@ -189,7 +189,7 @@ local function checkInbox(serverID, username)
         print("Your Inbox:")
         for _, mail in ipairs(data.mails) do
             setColors(colors.default, colors.background)
-            print("From: " .. mail.from .. " | Message: " .. mail.message)
+            print("From: " .. mail.from .. "\n" .. string.rep("-", screenWidth) .. "\n\n" .. mail.message)
         end
     else
         setColors(colors.info, colors.background)
